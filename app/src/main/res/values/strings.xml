@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Pedometer</string>
+    <string name="steps">Steps</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="continue_text">Continue</string>
+    <string name="steps_goal_format">%1$d/%2$d Steps</string>
+    <string name="remaining_steps_format">Walk %1$d steps more to\ncomplete your daily goal</string>
+    <string name="kcal">Kcal</string>
+    <string name="min">Min</string>
+    <string name="km">Km</string>
 </resources>
