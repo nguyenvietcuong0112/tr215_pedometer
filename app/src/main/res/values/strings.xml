@@ -9,4 +9,6 @@
     <string name="kcal">Kcal</string>
     <string name="min">Min</string>
     <string name="km">Km</string>
+    <string name="target_steps_format">Target: %1$d steps</string>
+
 </resources>

@@ -1,41 +1,51 @@
 package com.pedometer.step.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.pedometer.step.R;
 import com.pedometer.step.model.DatabaseHelper;
 
-
-
+import java.util.Calendar;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private static final int PERMISSION_REQUEST_ACTIVITY_RECOGNITION = 45;
+
     private static final int DEFAULT_GOAL = 6000;
     private static final double KCAL_PER_STEP = 0.04;
     private static final double KM_PER_STEP = 0.0008;
-    private static final float STEP_THRESHOLD = 12.0f; // Tăng ngưỡng lên
-    private static final int STEP_DELAY_MS = 300; // Tăng độ trễ
-    private static final int PEAK_COUNT = 4; // Số mẫu để xác định đỉnh
-    private static final float DIRECTION_THRESHOLD = 2.0f; // Ngưỡng thay đổi hướng
+    private static final float STEP_THRESHOLD = 5.0f;
+    private static final int STEP_DELAY_MS = 250;
+    private static final int PEAK_COUNT = 4;
+    private static final float DIRECTION_THRESHOLD = 1.0f;
 
     private TextView stepCountText, targetText, remainingText;
     private TextView kcalText, timeText, distanceText;
     private Button startStopButton;
     private ProgressBar progressBar;
     private ImageButton settingsButton;
+    private TextView settingDailyStep;
 
     private boolean isTracking = false;
     private SensorManager sensorManager;
@@ -51,10 +61,9 @@ public class HomeActivity extends AppCompatActivity {
     private float[] linear_acceleration = new float[3];
     private long lastStepTime = 0;
 
-
     private float[] lastValues = new float[PEAK_COUNT];
     private int valueIndex = 0;
-    private boolean isPotentialStep = false;
+    private int stepGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
         setupClickListeners();
         loadTodayData();
         setupTimeUpdater();
+        checkAndRequestPermissions();
     }
 
     private void initializeViews() {
@@ -78,9 +88,21 @@ public class HomeActivity extends AppCompatActivity {
         startStopButton = findViewById(R.id.startStopButton);
         progressBar = findViewById(R.id.progressBar);
         settingsButton = findViewById(R.id.settingsButton);
+        settingDailyStep = findViewById(R.id.settingsDailyStep);
 
-        progressBar.setMax(DEFAULT_GOAL);
+        stepGoal = getStepGoalForToday();
+        progressBar.setMax(stepGoal);
+        targetText.setText(getString(R.string.target_steps_format, stepGoal));
         databaseHelper = new DatabaseHelper(this);
+    }
+
+    private int getStepGoalForToday() {
+        Calendar calendar = Calendar.getInstance();
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        String today = days[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+
+        SharedPreferences prefs = getSharedPreferences("StepGoals", MODE_PRIVATE);
+        return prefs.getInt(today, DEFAULT_GOAL);
     }
 
     private void setupSensor() {
@@ -90,6 +112,8 @@ public class HomeActivity extends AppCompatActivity {
             if (accelerometer == null) {
                 showSensorNotAvailableDialog();
             }
+        } else {
+            showSensorNotAvailableDialog();
         }
     }
 
@@ -107,6 +131,11 @@ public class HomeActivity extends AppCompatActivity {
 
         settingsButton.setOnClickListener(v -> {
             // TODO: Implement settings
+        });
+
+        settingDailyStep.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, StepGoalActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -128,6 +157,8 @@ public class HomeActivity extends AppCompatActivity {
             startTime = System.currentTimeMillis() - elapsedTime;
             sensorManager.registerListener(stepListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             handler.post(timeUpdater);
+        } else {
+            showSensorNotAvailableDialog();
         }
     }
 
@@ -154,32 +185,26 @@ public class HomeActivity extends AppCompatActivity {
     private void detectStep(SensorEvent event) {
         final float alpha = 0.8f;
 
-        // Tách trọng lực như cũ
         gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
         gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
         gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-        // Tính gia tốc tuyến tính
         linear_acceleration[0] = event.values[0] - gravity[0];
         linear_acceleration[1] = event.values[1] - gravity[1];
         linear_acceleration[2] = event.values[2] - gravity[2];
 
-        // Tính độ lớn gia tốc
         float acceleration = (float) Math.sqrt(
                 linear_acceleration[0] * linear_acceleration[0] +
                         linear_acceleration[1] * linear_acceleration[1] +
                         linear_acceleration[2] * linear_acceleration[2]
         );
 
-        // Lưu giá trị vào buffer
         lastValues[valueIndex] = acceleration;
         valueIndex = (valueIndex + 1) % PEAK_COUNT;
 
         long currentTime = System.currentTimeMillis();
 
-        // Kiểm tra mẫu dao động
         if (isStepPattern() && (currentTime - lastStepTime) > STEP_DELAY_MS) {
-            // Kiểm tra hướng chuyển động chủ yếu là theo trục dọc (y)
             float verticalRatio = Math.abs(linear_acceleration[1]) /
                     (Math.abs(linear_acceleration[0]) + Math.abs(linear_acceleration[2]) + 0.1f);
 
@@ -192,7 +217,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private boolean isStepPattern() {
-        if (valueIndex < PEAK_COUNT - 1) return false;
+        if (valueIndex < 3) return false;
 
         float sum = 0;
         for (float value : lastValues) {
@@ -200,38 +225,35 @@ public class HomeActivity extends AppCompatActivity {
         }
         float avg = sum / PEAK_COUNT;
 
-        boolean hasPositivePeak = false;
-        boolean hasNegativePeak = false;
+        float max = Float.MIN_VALUE;
+        float min = Float.MAX_VALUE;
 
         for (float value : lastValues) {
-            if (value > avg + STEP_THRESHOLD) {
-                hasPositivePeak = true;
-            }
-            if (value < avg - STEP_THRESHOLD/2) {
-                hasNegativePeak = true;
-            }
+            if (value > max) max = value;
+            if (value < min) min = value;
         }
 
-        return hasPositivePeak && hasNegativePeak;
+        float amplitude = max - min;
+
+        return amplitude > STEP_THRESHOLD;
     }
 
     private void updateUI() {
-        stepCountText.setText(String.valueOf(stepCount));
-        progressBar.setProgress(stepCount);
+        runOnUiThread(() -> {
+            stepCountText.setText(String.valueOf(stepCount));
+            progressBar.setProgress(stepCount);
 
-        targetText.setText(getString(R.string.steps_goal_format, stepCount, DEFAULT_GOAL));
+            int remainingSteps = Math.max(0, stepGoal - stepCount);
+            remainingText.setText(getString(R.string.remaining_steps_format, remainingSteps));
 
-        int remainingSteps = DEFAULT_GOAL - stepCount;
-        remainingText.setText(getString(R.string.remaining_steps_format,
-                Math.max(0, remainingSteps)));
+            double kcal = stepCount * KCAL_PER_STEP;
+            double distance = stepCount * KM_PER_STEP;
 
-        double kcal = stepCount * KCAL_PER_STEP;
-        double distance = stepCount * KM_PER_STEP;
+            kcalText.setText(String.format("%.2f", kcal));
+            distanceText.setText(String.format("%.2f", distance));
 
-        kcalText.setText(String.format("%.2f", kcal));
-        distanceText.setText(String.format("%.2f", distance));
-
-        updateTimeDisplay();
+            updateTimeDisplay();
+        });
     }
 
     private void updateTimeDisplay() {
@@ -245,13 +267,16 @@ public class HomeActivity extends AppCompatActivity {
         DatabaseHelper.StepData todayData = databaseHelper.getTodayStepData();
         stepCount = todayData.steps;
         elapsedTime = todayData.time;
+        stepGoal = getStepGoalForToday();
+        progressBar.setMax(stepGoal);
+        targetText.setText(getString(R.string.target_steps_format, stepGoal));
         updateUI();
     }
 
     private void saveCurrentData() {
         databaseHelper.saveStepData(
                 stepCount,
-                DEFAULT_GOAL,
+                stepGoal,
                 stepCount * KCAL_PER_STEP,
                 stepCount * KM_PER_STEP,
                 elapsedTime
@@ -288,5 +313,33 @@ public class HomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(timeUpdater);
+    }
+
+    private void checkAndRequestPermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
+                        PERMISSION_REQUEST_ACTIVITY_RECOGNITION);
+            } else {
+                setupSensor();
+            }
+        } else {
+            setupSensor();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_ACTIVITY_RECOGNITION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setupSensor();
+            } else {
+                Toast.makeText(this, "Ứng dụng cần quyền theo dõi hoạt động để đếm bước chân",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

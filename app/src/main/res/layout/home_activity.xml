@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/gradient_background"
-    android:padding="16dp">
+    android:background="#FFFFFF"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,82 +13,107 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pedometer"
-            android:textSize="24sp"
-            android:textColor="@color/white"
             android:layout_alignParentStart="true"
-            android:drawablePadding="8dp"/>
+            android:drawablePadding="8dp"
+            android:text="Pedometer"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
 
         <ImageButton
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
     </RelativeLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp">
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="200dp"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:progress="0"
-            android:progressDrawable="@drawable/circular_progress"
-            style="?android:attr/progressBarStyleHorizontal"/>
+            android:layout_marginTop="32dp"
+            android:layout_weight="1">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:progress="0"
+                android:progressDrawable="@drawable/circular_progress" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/stepCountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="50"
+                    android:textColor="@color/black"
+                    android:textSize="48sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
+                    android:text="Steps"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/stepCountText"
+                android:id="@+id/targetText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="50/6000 Steps"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/remainingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Steps"
-                android:textColor="@color/white"
-                android:drawablePadding="4dp"/>
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Walk 5950 steps more to\ncomplete your daily goal"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/startStopButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_button"
+                android:text="Continue"
+                android:textColor="@color/black" />
+
         </LinearLayout>
-    </FrameLayout>
 
-    <TextView
-        android:id="@+id/targetText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="50/6000 Steps"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
-
-    <TextView
-        android:id="@+id/remainingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Walk 5950 steps more to\ncomplete your daily goal"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:layout_gravity="center"/>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp">
 
@@ -104,8 +128,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -118,20 +142,20 @@
                     android:layout_height="wrap_content"
                     android:text="2.00"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kcal"/>
+                    android:text="Kcal" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -144,20 +168,20 @@
                     android:layout_height="wrap_content"
                     android:text="00:01:17"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Min"/>
+                    android:text="Min" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -170,23 +194,42 @@
                     android:layout_height="wrap_content"
                     android:text="0.06"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Km"/>
+                    android:text="Km" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/startStopButton"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Continue"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_button"
-        android:textColor="@color/white"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Your daily goals"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/settingsDailyStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="Details" />
+    </LinearLayout>
+
+
 
 </LinearLayout>
