@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ import com.pedometer.step.R;
 import com.pedometer.step.model.DatabaseHelper;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -56,6 +60,9 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private Handler handler = new Handler();
     private Runnable timeUpdater;
+    private ImageView mondayGoal, tuesdayGoal, wednesdayGoal, thursdayGoal, fridayGoal, saturdayGoal, sundayGoal;
+
+    private  TextView stepsTextView,kcalTextView,kmTextView,hoursTextView;
 
     private float[] gravity = new float[3];
     private float[] linear_acceleration = new float[3];
@@ -90,10 +97,27 @@ public class HomeActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settingsButton);
         settingDailyStep = findViewById(R.id.settingsDailyStep);
 
+
+        mondayGoal = findViewById(R.id.dayMonday);
+        tuesdayGoal = findViewById(R.id.dayTuesday);
+        wednesdayGoal = findViewById(R.id.dayWednesday);
+        thursdayGoal = findViewById(R.id.dayThursday);
+        fridayGoal = findViewById(R.id.dayFriday);
+        saturdayGoal = findViewById(R.id.daySaturday);
+        sundayGoal = findViewById(R.id.daySunday);
+
+        stepsTextView = findViewById(R.id.stepsTextView);
+        hoursTextView = findViewById(R.id.hoursTextView);
+        kcalTextView = findViewById(R.id.kcalTextView);
+        kmTextView = findViewById(R.id.kmTextView);
+
         stepGoal = getStepGoalForToday();
         progressBar.setMax(stepGoal);
         targetText.setText(getString(R.string.target_steps_format, stepGoal));
         databaseHelper = new DatabaseHelper(this);
+
+        updateDailyGoals();
+        showMonthlyReport();
     }
 
     private int getStepGoalForToday() {
@@ -103,6 +127,79 @@ public class HomeActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("StepGoals", MODE_PRIVATE);
         return prefs.getInt(today, DEFAULT_GOAL);
+    }
+
+    private void updateDailyGoals() {
+        SharedPreferences prefs = getSharedPreferences("StepGoals", MODE_PRIVATE);
+        Calendar calendar = Calendar.getInstance();
+        int todayIndex = calendar.get(Calendar.DAY_OF_WEEK);
+
+        updateGoalStatus(sundayGoal, prefs.getInt("Sunday", DEFAULT_GOAL), Calendar.SUNDAY, todayIndex);
+        updateGoalStatus(mondayGoal, prefs.getInt("Monday", DEFAULT_GOAL), Calendar.MONDAY, todayIndex);
+        updateGoalStatus(tuesdayGoal, prefs.getInt("Tuesday", DEFAULT_GOAL), Calendar.TUESDAY, todayIndex);
+        updateGoalStatus(wednesdayGoal, prefs.getInt("Wednesday", DEFAULT_GOAL), Calendar.WEDNESDAY, todayIndex);
+        updateGoalStatus(thursdayGoal, prefs.getInt("Thursday", DEFAULT_GOAL), Calendar.THURSDAY, todayIndex);
+        updateGoalStatus(fridayGoal, prefs.getInt("Friday", DEFAULT_GOAL), Calendar.FRIDAY, todayIndex);
+        updateGoalStatus(saturdayGoal, prefs.getInt("Saturday", DEFAULT_GOAL), Calendar.SATURDAY, todayIndex);
+    }
+    private void updateGoalStatus(ImageView dayView, int goal, int dayIndex, int todayIndex) {
+        if (dayIndex < todayIndex) {
+            if (stepCount >= goal) {
+                dayView.setImageResource(R.drawable.ic_circle_checked);
+            } else {
+                dayView.setImageResource(R.drawable.ic_circle_failed);
+            }
+        } else if (dayIndex == todayIndex) {
+            dayView.setImageResource(R.drawable.ic_circle_calendar);
+        } else {
+            dayView.setImageResource(R.drawable.ic_circle_disabled);
+        }
+    }
+
+    private void showMonthlyReport() {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH đếm từ 0
+
+        // Chuẩn hóa định dạng yyyy-MM
+        String monthStr = String.format(Locale.getDefault(), "%04d-%02d", year, month);
+
+        // Query tất cả dữ liệu trong tháng hiện tại
+        Cursor cursor = db.rawQuery("SELECT * FROM " + "steps" + " WHERE " + "date" + " LIKE ?",
+                new String[]{monthStr + "%"}); // tìm các ngày có tiền tố là "2025-03-%"
+
+        int totalSteps = 0;
+        double totalCalories = 0;
+        double totalDistance = 0;
+        long totalTime = 0;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                totalSteps += cursor.getInt(cursor.getColumnIndexOrThrow("steps"));
+                totalCalories += cursor.getDouble(cursor.getColumnIndexOrThrow("calories"));
+                totalDistance += cursor.getDouble(cursor.getColumnIndexOrThrow("distance"));
+                totalTime += cursor.getLong(cursor.getColumnIndexOrThrow("time"));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        db.close();
+
+        // Hiển thị lên UI
+        stepsTextView.setText(totalSteps + " Steps");
+        kcalTextView.setText(String.format(Locale.getDefault(), "%.1f Kcal", totalCalories));
+        kmTextView.setText(String.format(Locale.getDefault(), "%.2f Km", totalDistance));
+        hoursTextView.setText(formatSecondsToHMS(totalTime));
+    }
+
+    private String formatSecondsToHMS(long totalSeconds) {
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     private void setupSensor() {
@@ -135,6 +232,10 @@ public class HomeActivity extends AppCompatActivity {
 
         settingDailyStep.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, StepGoalActivity.class);
+            startActivity(intent);
+        });
+        findViewById(R.id.details_report).setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, DetailsReportActivity.class);
             startActivity(intent);
         });
     }

@@ -10,5 +10,29 @@
     <string name="min">Min</string>
     <string name="km">Km</string>
     <string name="target_steps_format">Target: %1$d steps</string>
+    <string name="monthly_steps_format">You have walked %d steps</string>
+    <string name="monthly_kcal_format">%.2f\nKcal</string>
+    <string name="monthly_time_format">%s\nMin</string>
+    <string name="monthly_distance_format">%.2f\nKm</string>
+    <string-array name="statistic_options">
+        <item>Steps</item>
+        <item>Distance</item>
+        <item>Calories</item>
+    </string-array>
 
+
+    <string-array name="month_options">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -98,4 +101,174 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         public double distance = 0;
         public long time = 0;
     }
+
+    public MonthlyStepData getMonthlyStepData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        MonthlyStepData monthlyData = new MonthlyStepData();
+
+        String query = "SELECT SUM(steps) as total_steps, SUM(calories) as total_calories, " +
+                "SUM(distance) as total_distance, SUM(time) as total_time " +
+                "FROM steps WHERE date >= date('now', 'start of month')";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            int totalStepsIndex = cursor.getColumnIndex("total_steps");
+            int totalCaloriesIndex = cursor.getColumnIndex("total_calories");
+            int totalDistanceIndex = cursor.getColumnIndex("total_distance");
+            int totalTimeIndex = cursor.getColumnIndex("total_time");
+
+            if (totalStepsIndex != -1 && totalCaloriesIndex != -1 &&
+                    totalDistanceIndex != -1 && totalTimeIndex != -1) {
+                monthlyData.totalSteps = cursor.getInt(totalStepsIndex);
+                monthlyData.totalCalories = cursor.getDouble(totalCaloriesIndex);
+                monthlyData.totalDistance = cursor.getDouble(totalDistanceIndex);
+                monthlyData.totalTime = cursor.getLong(totalTimeIndex);
+            }
+        }
+        cursor.close();
+        return monthlyData;
+    }
+
+    public List<DailyStepData> getLast30DaysData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<DailyStepData> dailyData = new ArrayList<>();
+
+        String query = "SELECT date, steps, calories, distance FROM steps WHERE date >= date('now', '-30 days') ORDER BY date ASC";
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            int dateColumnIndex = cursor.getColumnIndex("date");
+            int stepsColumnIndex = cursor.getColumnIndex("steps");
+            int caloriesColumnIndex = cursor.getColumnIndex("calories");
+            int distanceColumnIndex = cursor.getColumnIndex("distance");
+
+            if (dateColumnIndex != -1 && stepsColumnIndex != -1 &&
+                    caloriesColumnIndex != -1 && distanceColumnIndex != -1) {
+                do {
+                    DailyStepData data = new DailyStepData();
+                    data.date = cursor.getString(dateColumnIndex);
+                    data.steps = cursor.getInt(stepsColumnIndex);
+                    data.calories = cursor.getFloat(caloriesColumnIndex);
+                    data.distance = cursor.getFloat(distanceColumnIndex);
+                    dailyData.add(data);
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        return dailyData;
+    }
+
+    /**
+     * Get data for a specific month
+     * @param monthIndex 0 for January, 1 for February, etc.
+     * @return List of DailyStepData objects for the given month
+     */
+    public List<DailyStepData> getMonthData(int monthIndex) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<DailyStepData> dailyData = new ArrayList<>();
+
+        // Get current year
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+
+        // Create the start and end date of the month
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(currentYear, monthIndex, 1, 0, 0, 0);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(currentYear, monthIndex, startCal.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String startDate = sdf.format(startCal.getTime());
+        String endDate = sdf.format(endCal.getTime());
+
+        String query = "SELECT date, steps, calories, distance FROM " + TABLE_NAME +
+                " WHERE date >= ? AND date <= ? ORDER BY date ASC";
+
+        Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
+        if (cursor.moveToFirst()) {
+            int dateColumnIndex = cursor.getColumnIndex("date");
+            int stepsColumnIndex = cursor.getColumnIndex("steps");
+            int caloriesColumnIndex = cursor.getColumnIndex("calories");
+            int distanceColumnIndex = cursor.getColumnIndex("distance");
+
+            if (dateColumnIndex != -1 && stepsColumnIndex != -1 &&
+                    caloriesColumnIndex != -1 && distanceColumnIndex != -1) {
+                do {
+                    DailyStepData data = new DailyStepData();
+                    data.date = cursor.getString(dateColumnIndex);
+                    data.steps = cursor.getInt(stepsColumnIndex);
+                    data.calories = cursor.getFloat(caloriesColumnIndex);
+                    data.distance = cursor.getFloat(distanceColumnIndex);
+                    dailyData.add(data);
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        return dailyData;
+    }
+
+    /**
+     * Get monthly data for a specific statistic type
+     * @param monthIndex 0 for January, 1 for February, etc.
+     * @param statisticType 0 for steps, 1 for distance, 2 for calories
+     * @return MonthlyStepData containing the totals
+     */
+    public MonthlyStepData getMonthlyStatData(int monthIndex, int statisticType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        MonthlyStepData monthlyData = new MonthlyStepData();
+
+        // Get current year
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+
+        // Create the start and end date of the month
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(currentYear, monthIndex, 1, 0, 0, 0);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(currentYear, monthIndex, startCal.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String startDate = sdf.format(startCal.getTime());
+        String endDate = sdf.format(endCal.getTime());
+
+        String query = "SELECT SUM(steps) as total_steps, SUM(calories) as total_calories, " +
+                "SUM(distance) as total_distance, SUM(time) as total_time " +
+                "FROM " + TABLE_NAME + " WHERE date >= ? AND date <= ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
+        if (cursor.moveToFirst()) {
+            int totalStepsIndex = cursor.getColumnIndex("total_steps");
+            int totalCaloriesIndex = cursor.getColumnIndex("total_calories");
+            int totalDistanceIndex = cursor.getColumnIndex("total_distance");
+            int totalTimeIndex = cursor.getColumnIndex("total_time");
+
+            if (totalStepsIndex != -1 && totalCaloriesIndex != -1 &&
+                    totalDistanceIndex != -1 && totalTimeIndex != -1) {
+                monthlyData.totalSteps = cursor.getInt(totalStepsIndex);
+                monthlyData.totalCalories = cursor.getDouble(totalCaloriesIndex);
+                monthlyData.totalDistance = cursor.getDouble(totalDistanceIndex);
+                monthlyData.totalTime = cursor.getLong(totalTimeIndex);
+            }
+        }
+        cursor.close();
+        return monthlyData;
+    }
+
+    public static class MonthlyStepData {
+        public int totalSteps;
+        public double totalCalories;
+        public double totalDistance;
+        public long totalTime;
+    }
+
+    public static class DailyStepData {
+        public String date;
+        public int steps;
+        public float calories;
+        public float distance;
+    }
+
+
 }
