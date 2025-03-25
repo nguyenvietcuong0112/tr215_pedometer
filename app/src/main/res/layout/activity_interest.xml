@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+
+
+    <CheckBox
+        android:id="@+id/cbTrackExpenses"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="a"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toStartOf="@id/cbMonitorSavings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <CheckBox
+        android:id="@+id/cbMonitorSavings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="monitor_savings"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cbTrackExpenses"
+        app:layout_constraintTop_toTopOf="@id/cbTrackExpenses" />
+
+    <CheckBox
+        android:id="@+id/cbAnalyzeSpending"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="analyze_spending"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toStartOf="@id/cbOptimizeSpending"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbTrackExpenses" />
+
+    <CheckBox
+        android:id="@+id/cbOptimizeSpending"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="optimize_spending"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cbAnalyzeSpending"
+        app:layout_constraintTop_toTopOf="@id/cbAnalyzeSpending" />
+
+    <CheckBox
+        android:id="@+id/cbPlanInvestments"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="plan_investments"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toStartOf="@id/cbFinancialReports"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbAnalyzeSpending" />
+
+    <CheckBox
+        android:id="@+id/cbFinancialReports"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="financial_reports"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cbPlanInvestments"
+        app:layout_constraintTop_toTopOf="@id/cbPlanInvestments" />
+
+    <CheckBox
+        android:id="@+id/cbTrackExpensesIncome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:padding="12dp"
+        android:text="plan_investments"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toStartOf="@id/cbFinancialReports"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbPlanInvestments" />
+
+    <CheckBox
+        android:id="@+id/cbOthers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/interest_selector"
+        android:button="@null"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:padding="12dp"
+        android:text="others"
+        android:textColor="@color/interest_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cbTrackExpensesIncome"
+        app:layout_constraintTop_toTopOf="@id/cbTrackExpensesIncome" />
+
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/button_state_color"
+        android:enabled="false"
+        android:text="continue_btn"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbTrackExpensesIncome" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/btn_next_loading"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_60sdp"
+        android:indeterminate="true"
+        android:indeterminateTint="#1590EA"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbPlanInvestments" />
+
+    <FrameLayout
+        android:id="@+id/fr_ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ads_native"
+        android:paddingBottom="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/shimmer_native_language"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/ads_shimmer_native_language" />
+        </RelativeLayout>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

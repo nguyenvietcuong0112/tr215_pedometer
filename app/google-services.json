@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "903126287555",
+    "project_id": "tr215-pedometer",
+    "storage_bucket": "tr215-pedometer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903126287555:android:76a7f581a139c870e78e76",
+        "android_client_info": {
+          "package_name": "com.stepcounter.pedometer.walking.steptracker.calorieburner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMsLjrb40sGj2TZu-6NtOrUbN6bh1pxsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

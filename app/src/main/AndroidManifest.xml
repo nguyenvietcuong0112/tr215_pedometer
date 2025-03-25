@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
-    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true" />
-    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
 
 
     <application
+        android:name="MyApplication"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,11 +30,11 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31" >
 
-
         <activity
-            android:name=".activity.HomeActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,14 +42,100 @@
 
         </activity>
 
+
+        <activity
+            android:name=".activity.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
         <activity
             android:name=".activity.StepGoalActivity"
             android:screenOrientation="portrait"
-            android:exported="true"/>
+            android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
             android:name=".activity.DetailsReportActivity"
             android:screenOrientation="portrait"
-            android:exported="true"/>
+            android:theme="@style/Theme.Design.NoActionBar"/>
+
+
+        <activity
+            android:name=".activity.GuideActivity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.InterestActivity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".utils.NativeFullLanguage"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".nativefull.ActivityLoadNativeIntro1Full"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".nativefull.ActivityLoadNativeIntro2Full"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".nativefull.ActivityLoadNativeIntro3Full"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activity.Intro1Activity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Intro2Activity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Intro3Activity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Intro4Activity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LanguageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".utils.ActivityLoadNativeFull"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoInitEnabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true" />
     </application>
+
 
 </manifest>
