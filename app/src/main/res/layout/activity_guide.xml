@@ -58,7 +58,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
         android:text="@string/step1"
-        android:textColor="#1CA363"
+        android:textColor="#58A0E2"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

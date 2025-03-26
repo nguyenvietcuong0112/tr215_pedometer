@@ -21,23 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-//public class SplashActivity extends AppCompatActivity {
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        String selectedCurrencyCode = SharePreferenceUtils.getSelectedCurrencyCode(this);
-//        if (selectedCurrencyCode.isEmpty()) {
-//            startActivity(new Intent(SplashActivity.this, CurrencyUnitActivity.class));
-//        } else {
-//            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-//
-//        }
-//
-//        finish();
-//    }
-//}
-
 
 public class SplashActivity extends BaseActivity {
     private InterCallback interCallback;
@@ -81,12 +64,12 @@ public class SplashActivity extends BaseActivity {
 //                if (SharePreferenceUtils.getInstance(SplashActivity.this).isLanguageSetting()) {
 //                    startActivity(new Intent(SplashActivity.this, IntroActivity.class));
 //                } else {
-                if (counterValue == 1) {
+//                if (counterValue == 1) {
                     startActivity(new Intent(SplashActivity.this, InterestActivity.class));
-                } else {
+//                } else {
 //                    startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
-                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-                }
+//                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+//                }
 //
                 finish();
             }

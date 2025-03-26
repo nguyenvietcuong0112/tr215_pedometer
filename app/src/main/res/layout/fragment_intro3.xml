@@ -30,13 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_10sdp"
         android:clipToPadding="false"
-        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/_10sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/frAds"
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
         <ImageView
             android:id="@+id/cricle_1"
@@ -72,16 +70,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:paddingHorizontal="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_100sdp"
         android:fontFamily="@font/montserrat_bold"
+        android:textAlignment="center"
         android:text="@string/note_continue3"
         android:textColor="#152031"
         android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/ll_cricle"
-        app:layout_constraintBottom_toTopOf="@+id/frAds"
-        app:layout_constraintEnd_toStartOf="@id/frNext"
-        app:layout_constraintTop_toTopOf="@+id/ll_cricle" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 
     <ImageView
@@ -100,11 +100,11 @@
         android:id="@+id/frNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_cricle">
+        app:layout_constraintBottom_toTopOf="@+id/frAds"
+        app:layout_constraintTop_toTopOf="@+id/ll_cricle">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -161,7 +161,6 @@
         <include layout="@layout/ads_native_intro" />
 
     </FrameLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

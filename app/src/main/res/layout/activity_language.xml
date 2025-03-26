@@ -6,12 +6,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF">
+        android:background="#EEF1FF">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_70sdp"
             android:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -20,9 +20,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingHorizontal="10dp"
-                android:background="#24B26D"
+                android:background="@drawable/bg_gradient_header"
                 android:paddingVertical="15dp">
 
                 <ImageView

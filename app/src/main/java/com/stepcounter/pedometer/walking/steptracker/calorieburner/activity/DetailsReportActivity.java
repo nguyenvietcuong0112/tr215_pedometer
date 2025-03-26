@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ public class DetailsReportActivity extends AppCompatActivity {
     private LineChart chart;
     private DatabaseHelper databaseHelper;
 
-    private Spinner monthSpinner;
+//    private Spinner monthSpinner;
     private Spinner statisticSpinner;
 
     private static final int STATISTIC_STEPS = 0;
@@ -43,6 +44,12 @@ public class DetailsReportActivity extends AppCompatActivity {
     private static final int STATISTIC_CALORIES = 2;
 
     private int currentStatisticType = STATISTIC_STEPS;
+
+
+    private TextView tvCurrentMonth;
+    private ImageView btnPreviousMonth, btnNextMonth;
+    private int currentMonthIndex;
+
 
 
     @Override
@@ -56,14 +63,45 @@ public class DetailsReportActivity extends AppCompatActivity {
         setupBackButton();
         setupSpinners();
         loadMonthlyData();
+        setupMonthNavigation();
 
 
-        Calendar cal = Calendar.getInstance();
-        int currentMonth = cal.get(Calendar.MONTH); // 0 for January, 1 for February, etc.
-        monthSpinner.setSelection(currentMonth);
+//        Calendar cal = Calendar.getInstance();
+//        int currentMonth = cal.get(Calendar.MONTH); // 0 for January, 1 for February, etc.
+//        monthSpinner.setSelection(currentMonth);
 
-        updateMonthlyDataDisplay(currentMonth);
+//        updateMonthlyDataDisplay(currentMonth);
         setupChart();
+    }
+
+    private void setupMonthNavigation() {
+        tvCurrentMonth = findViewById(R.id.tv_current_month);
+        btnPreviousMonth = findViewById(R.id.btn_previous_month);
+        btnNextMonth = findViewById(R.id.btn_next_month);
+
+        // Lấy tháng hiện tại
+        Calendar cal = Calendar.getInstance();
+        currentMonthIndex = cal.get(Calendar.MONTH);
+        updateMonthDisplay();
+
+        btnPreviousMonth.setOnClickListener(v -> {
+            currentMonthIndex = (currentMonthIndex - 1 + 12) % 12;
+            updateMonthDisplay();
+        });
+
+        btnNextMonth.setOnClickListener(v -> {
+            currentMonthIndex = (currentMonthIndex + 1) % 12;
+            updateMonthDisplay();
+        });
+    }
+
+    private void updateMonthDisplay() {
+        String[] monthNames = getResources().getStringArray(R.array.month_options);
+        tvCurrentMonth.setText(monthNames[currentMonthIndex]);
+
+        // Cập nhật dữ liệu cho tháng được chọn
+        setupChart();
+        updateMonthlyDataDisplay(currentMonthIndex);
     }
 
     private void initializeViews() {
@@ -73,24 +111,22 @@ public class DetailsReportActivity extends AppCompatActivity {
         distanceText = findViewById(R.id.distanceText);
         chart = findViewById(R.id.chart);
 
-        monthSpinner = findViewById(R.id.monthSpinner);
+//        monthSpinner = findViewById(R.id.monthSpinner);
         statisticSpinner = findViewById(R.id.statisticSpinner);
 
     }
 
     private void setupSpinners() {
-        // Setup statistic spinner
         ArrayAdapter<CharSequence> statisticAdapter = ArrayAdapter.createFromResource(this,
-                R.array.statistic_options, android.R.layout.simple_spinner_item);
-        statisticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.array.statistic_options, R.layout.spinner_item);
+        statisticAdapter.setDropDownViewResource(R.layout.spinner_item);
         statisticSpinner.setAdapter(statisticAdapter);
 
         statisticSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentStatisticType = position;
-                setupChart(); // Update chart based on selected statistic type
-//                updateMonthlyDataDisplay(monthSpinner.getSelectedItemPosition());
+                setupChart();
 
             }
 
@@ -101,28 +137,28 @@ public class DetailsReportActivity extends AppCompatActivity {
         });
 
         // Setup month spinner
-        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
-                R.array.month_options, android.R.layout.simple_spinner_item);
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monthSpinner.setAdapter(monthAdapter);
-
-        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setupChart(); // Update chart based on selected month
-                updateMonthlyDataDisplay(position);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
-            }
-        });
+//        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
+//                R.array.month_options, R.layout.spinner_item);
+//        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        monthSpinner.setAdapter(monthAdapter);
+//
+//        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                setupChart(); // Update chart based on selected month
+//                updateMonthlyDataDisplay(position);
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // Do nothing
+//            }
+//        });
     }
 
     private void setupBackButton() {
-        ImageButton backButton = findViewById(R.id.backButton);
+        ImageView backButton = findViewById(R.id.iv_back);
         backButton.setOnClickListener(v -> finish());
     }
 
@@ -146,7 +182,7 @@ public class DetailsReportActivity extends AppCompatActivity {
         List<String> labels = new ArrayList<>();
 
         // Get selected month from spinner
-        int selectedMonth = monthSpinner.getSelectedItemPosition(); // 0 for January, 1 for February, etc.
+        int selectedMonth = currentMonthIndex;
 
         // Fetch data for the selected month
         List<DatabaseHelper.DailyStepData> dailyData = databaseHelper.getMonthData(selectedMonth);

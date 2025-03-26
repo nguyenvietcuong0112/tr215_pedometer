@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +15,10 @@ import com.stepcounter.pedometer.walking.steptracker.calorieburner.R;
 public class StepGoalActivity extends AppCompatActivity {
 
     private EditText mondayGoal, tuesdayGoal, wednesdayGoal, thursdayGoal, fridayGoal, saturdayGoal, sundayGoal;
-    private Button saveButton;
+    private LinearLayout saveButton;
     private SharedPreferences prefs;
+
+    private ImageView ivBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class StepGoalActivity extends AppCompatActivity {
         saturdayGoal = findViewById(R.id.saturdayGoal);
         sundayGoal = findViewById(R.id.sundayGoal);
         saveButton = findViewById(R.id.saveButton);
+        ivBack = findViewById(R.id.iv_back);
+
+        ivBack.setOnClickListener(view -> onBackPressed());
     }
 
     private void loadGoals() {

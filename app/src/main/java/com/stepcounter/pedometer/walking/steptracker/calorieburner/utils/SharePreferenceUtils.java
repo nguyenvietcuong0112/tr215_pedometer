@@ -43,7 +43,7 @@ public class SharePreferenceUtils {
 
     public static boolean isOrganic(Context context) {
         SharedPreferences pref = context.getSharedPreferences("data", Context.MODE_PRIVATE);
-        return pref.getBoolean("organic", false);
+        return pref.getBoolean("organic", true);
     }
 
     public static void setOrganicValue(Context context, boolean value) {

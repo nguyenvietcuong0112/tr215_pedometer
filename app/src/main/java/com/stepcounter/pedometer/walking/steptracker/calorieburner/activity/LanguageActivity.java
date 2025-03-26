@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class LanguageActivity extends BaseActivity implements UILanguageCustom.OnItemClickListener {
+public class  LanguageActivity extends BaseActivity implements UILanguageCustom.OnItemClickListener {
 
     String codeLang = "";
     String langDevice = "en";

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +48,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView stepCountText, targetText, remainingText;
     private TextView kcalText, timeText, distanceText;
-    private Button startStopButton;
+    private LinearLayout startStopButton;
+
     private ProgressBar progressBar;
     private ImageButton settingsButton;
     private ImageView settingDailyStep;
@@ -64,6 +66,9 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView mondayGoal, tuesdayGoal, wednesdayGoal, thursdayGoal, fridayGoal, saturdayGoal, sundayGoal;
 
     private  TextView stepsTextView,kcalTextView,kmTextView,hoursTextView;
+
+    private TextView tvPlay;
+    private ImageView icPlay;
 
     private float[] gravity = new float[3];
     private float[] linear_acceleration = new float[3];
@@ -111,6 +116,9 @@ public class HomeActivity extends AppCompatActivity {
         hoursTextView = findViewById(R.id.hoursTextView);
         kcalTextView = findViewById(R.id.kcalTextView);
         kmTextView = findViewById(R.id.kmTextView);
+
+        tvPlay = findViewById(R.id.tv_play);
+        icPlay = findViewById(R.id.ic_play);
 
         stepGoal = getStepGoalForToday();
         progressBar.setMax(stepGoal);
@@ -165,10 +173,8 @@ public class HomeActivity extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH đếm từ 0
 
-        // Chuẩn hóa định dạng yyyy-MM
         String monthStr = String.format(Locale.getDefault(), "%04d-%02d", year, month);
 
-        // Query tất cả dữ liệu trong tháng hiện tại
         Cursor cursor = db.rawQuery("SELECT * FROM " + "steps" + " WHERE " + "date" + " LIKE ?",
                 new String[]{monthStr + "%"}); // tìm các ngày có tiền tố là "2025-03-%"
 
@@ -220,10 +226,12 @@ public class HomeActivity extends AppCompatActivity {
             isTracking = !isTracking;
             if (isTracking) {
                 startStepTracking();
-                startStopButton.setText(R.string.stop);
+                tvPlay.setText(R.string.stop);
+                icPlay.setImageResource(R.drawable.ic_pause);
             } else {
                 stopStepTracking();
-                startStopButton.setText(R.string.continue_text);
+                tvPlay.setText(R.string.continue_text);
+                icPlay.setImageResource(R.drawable.ic_play);
             }
         });
 

@@ -77,6 +77,7 @@ public class LanguageCustomAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (checkedPosition == getAdapterPosition()) {
                     binding.imgSelected.setImageResource(R.drawable.ic_checked_language);
                 } else {
+                    binding.imgSelected.setImageResource(R.drawable.ic_unchecked_language);
                     binding.imgSelected.setImageDrawable(null);
                 }
             }

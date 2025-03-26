@@ -11,9 +11,9 @@
     <string name="km">Km</string>
     <string name="target_steps_format">Target: %1$d steps</string>
     <string name="monthly_steps_format">You have walked %d steps</string>
-    <string name="monthly_kcal_format">%.2f\nKcal</string>
-    <string name="monthly_time_format">%s\nMin</string>
-    <string name="monthly_distance_format">%.2f\nKm</string>
+    <string name="monthly_kcal_format">%.2f</string>
+    <string name="monthly_time_format">%s</string>
+    <string name="monthly_distance_format">%.2f</string>
     <string-array name="statistic_options">
         <item>Steps</item>
         <item>Distance</item>
@@ -37,10 +37,10 @@
     </string-array>
 
 
-    <string name="note_continue1">Take Control of Your Finances with AI!</string>
-    <string name="note_continue2">Smart Income &amp; Expense Tracking</string>
-    <string name="note_continue3">Get Personalized Financial Insights</string>
-    <string name="note_continue4">Let’s Make Your Money Work for You!</string>
+    <string name="note_continue1">Count your steps and stay active!</string>
+    <string name="note_continue2">Monitor your distance and calories in real time! </string>
+    <string name="note_continue3">Set goals and track your progress easily!</string>
+    <string name="note_continue4">Stay motivated and keep moving! </string>
     <string name="note_guide1"></string>
     <string name="note_guide2"></string>
     <string name="note_guide3"></string>
@@ -53,11 +53,22 @@
     <string name="step2">STEP 2</string>
     <string name="step3">STEP 3</string>
     <string name="step4">STEP 4</string>
-    <string name="step_detail1">Go Home! Click on “Chat now” button.</string>
-    <string name="step_detail2">Enter your first transaction and see how it works!</string>
-    <string name="step_detail3">See your spending trends and improve your budget!</string>
-    <string name="step_detail4">Edit your recent transactions!</string>
+    <string name="step_detail1">Click the “continue” button to start walking</string>
+    <string name="step_detail2">Click the “continue” button to start walking</string>
+    <string name="step_detail3">Click the “continue” button to start walking</string>
+    <string name="step_detail4">Click the “continue” button to start walking</string>
     <string name="interests">Interests</string>
+
+    <string name="monday_text"><font color='#000000'><b>M</b></font><font color='#5A5A5A'>onday</font></string>
+    <string name="tuesday_text"><font color='#000000'><b>T</b></font><font color='#5A5A5A'>uesday</font></string>
+    <string name="wednesday_text"><font color='#000000'><b>W</b></font><font color='#5A5A5A'>ednesday</font></string>
+    <string name="thursday_text"><font color='#000000'><b>T</b></font><font color='#5A5A5A'>hursday</font></string>
+    <string name="friday_text"><font color='#000000'><b>F</b></font><font color='#5A5A5A'>riday</font></string>
+    <string name="saturday_text"><font color='#000000'><b>S</b></font><font color='#5A5A5A'>aturday</font></string>
+    <string name="sunday_text"><font color='#000000'><b>S</b></font><font color='#5A5A5A'>unday</font></string>
+
+
+
 
     <string name="hindi">Hindi</string>
     <string name="spanish">Spanish</string>

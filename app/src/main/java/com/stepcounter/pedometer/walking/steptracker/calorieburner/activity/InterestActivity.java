@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class InterestActivity  extends BaseActivity {
+public class InterestActivity extends BaseActivity {
     private ActivityInterestBinding binding;
     private List<CheckBox> checkBoxes = new ArrayList<>();
     boolean isNativeLanguageSelectLoaded = false;
@@ -128,9 +129,6 @@ public class InterestActivity  extends BaseActivity {
         checkBoxes.add(binding.cbAnalyzeSpending);
         checkBoxes.add(binding.cbOptimizeSpending);
         checkBoxes.add(binding.cbPlanInvestments);
-        checkBoxes.add(binding.cbFinancialReports);
-        checkBoxes.add(binding.cbTrackExpensesIncome);
-        checkBoxes.add(binding.cbOthers);
     }
 
     private void setupListeners() {
@@ -144,20 +142,29 @@ public class InterestActivity  extends BaseActivity {
         }
 
         binding.btnContinue.setOnClickListener(v -> {
-            Intent intent = new Intent(InterestActivity.this, Intro1Activity.class);
-            startActivity(intent);
+            if (getSelectedCount() >= 2) {
+                Intent intent = new Intent(InterestActivity.this, Intro1Activity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Please select at least 2 interests", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void updateContinueButtonState() {
+        int selectedCount = getSelectedCount();
+        binding.btnContinue.setAlpha(selectedCount >= 2 ? 1.0f : 0.5f);
+        binding.btnContinue.setClickable(true);
+    }
+
+    private int getSelectedCount() {
         int selectedCount = 0;
         for (CheckBox checkBox : checkBoxes) {
             if (checkBox.isChecked()) {
                 selectedCount++;
             }
         }
-
-        binding.btnContinue.setEnabled(selectedCount >= 2);
+        return selectedCount;
     }
 
 
