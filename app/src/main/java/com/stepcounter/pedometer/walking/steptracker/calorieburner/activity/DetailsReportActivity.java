@@ -2,9 +2,11 @@ package com.stepcounter.pedometer.walking.steptracker.calorieburner.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -19,8 +21,13 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdView;
+import com.mallegan.ads.callback.NativeCallback;
+import com.mallegan.ads.util.Admob;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.R;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.model.DatabaseHelper;
+import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.SharePreferenceUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +54,7 @@ public class DetailsReportActivity extends AppCompatActivity {
 
 
     private TextView tvCurrentMonth;
+    private FrameLayout frAds;
     private ImageView btnPreviousMonth, btnNextMonth;
     private int currentMonthIndex;
 
@@ -64,14 +72,34 @@ public class DetailsReportActivity extends AppCompatActivity {
         setupSpinners();
         loadMonthlyData();
         setupMonthNavigation();
-
-
-//        Calendar cal = Calendar.getInstance();
-//        int currentMonth = cal.get(Calendar.MONTH); // 0 for January, 1 for February, etc.
-//        monthSpinner.setSelection(currentMonth);
-
-//        updateMonthlyDataDisplay(currentMonth);
         setupChart();
+        loadAds();
+    }
+
+    private void loadAds() {
+        Admob.getInstance().loadNativeAd(this, getString(R.string.native_report), new NativeCallback() {
+
+            @Override
+            public void onNativeAdLoaded(NativeAd nativeAd) {
+                super.onNativeAdLoaded(nativeAd);
+                NativeAdView adView = new NativeAdView(DetailsReportActivity.this);
+                if (!SharePreferenceUtils.isOrganic(DetailsReportActivity.this)) {
+                    adView = (NativeAdView) LayoutInflater.from(DetailsReportActivity.this).inflate(R.layout.layout_native_language_non_organic, null);
+                } else {
+                    adView = (NativeAdView) LayoutInflater.from(DetailsReportActivity.this).inflate(R.layout.layout_native_language, null);
+                }
+                frAds.removeAllViews();
+                frAds.addView(adView);
+                Admob.getInstance().pushAdsToViewCustom(nativeAd, adView);
+            }
+
+
+            @Override
+            public void onAdFailedToLoad() {
+                super.onAdFailedToLoad();
+                frAds.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setupMonthNavigation() {
@@ -99,7 +127,6 @@ public class DetailsReportActivity extends AppCompatActivity {
         String[] monthNames = getResources().getStringArray(R.array.month_options);
         tvCurrentMonth.setText(monthNames[currentMonthIndex]);
 
-        // Cập nhật dữ liệu cho tháng được chọn
         setupChart();
         updateMonthlyDataDisplay(currentMonthIndex);
     }
@@ -110,6 +137,7 @@ public class DetailsReportActivity extends AppCompatActivity {
         timeText = findViewById(R.id.timeText);
         distanceText = findViewById(R.id.distanceText);
         chart = findViewById(R.id.chart);
+        frAds = findViewById(R.id.frAds);
 
 //        monthSpinner = findViewById(R.id.monthSpinner);
         statisticSpinner = findViewById(R.id.statisticSpinner);
@@ -136,25 +164,6 @@ public class DetailsReportActivity extends AppCompatActivity {
             }
         });
 
-        // Setup month spinner
-//        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
-//                R.array.month_options, R.layout.spinner_item);
-//        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        monthSpinner.setAdapter(monthAdapter);
-//
-//        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                setupChart(); // Update chart based on selected month
-//                updateMonthlyDataDisplay(position);
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // Do nothing
-//            }
-//        });
     }
 
     private void setupBackButton() {
@@ -170,7 +179,8 @@ public class DetailsReportActivity extends AppCompatActivity {
         distanceText.setText(getString(R.string.monthly_distance_format, monthlyData.totalDistance));
     }
 
-    private String formatTime(long totalSeconds) {
+    private String formatTime(long totalMilliseconds) {
+        long totalSeconds = totalMilliseconds / 1000;
         long hours = totalSeconds / 3600;
         long minutes = (totalSeconds % 3600) / 60;
         long seconds = totalSeconds % 60;
@@ -181,13 +191,10 @@ public class DetailsReportActivity extends AppCompatActivity {
         List<Entry> entries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
-        // Get selected month from spinner
         int selectedMonth = currentMonthIndex;
 
-        // Fetch data for the selected month
         List<DatabaseHelper.DailyStepData> dailyData = databaseHelper.getMonthData(selectedMonth);
 
-        // Create maps to easily look up data by date
         Map<String, Integer> stepsMap = new HashMap<>();
         Map<String, Float> distanceMap = new HashMap<>();
         Map<String, Float> caloriesMap = new HashMap<>();
@@ -198,7 +205,6 @@ public class DetailsReportActivity extends AppCompatActivity {
             caloriesMap.put(data.date, data.calories);
         }
 
-        // Generate entries for the selected month
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar cal = Calendar.getInstance();
         int currentYear = cal.get(Calendar.YEAR);
@@ -209,7 +215,6 @@ public class DetailsReportActivity extends AppCompatActivity {
         for (int i = 0; i < maxDay; i++) {
             String date = sdf.format(cal.getTime());
 
-            // Get value based on selected statistic type
             float value = 0f;
             switch (currentStatisticType) {
                 case STATISTIC_STEPS:
@@ -228,27 +233,26 @@ public class DetailsReportActivity extends AppCompatActivity {
 
             if (cal.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH) &&
                     cal.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
-                todayIndex = i; // Save the index of today's date
+                todayIndex = i;
             }
             cal.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        // Get title for the data series based on selected statistic type
         String datasetLabel;
         int chartColor;
         switch (currentStatisticType) {
             case STATISTIC_DISTANCE:
                 datasetLabel = "Daily Distance (km)";
-                chartColor = getResources().getColor(R.color.colorAccent); // Use a different color for distance
+                chartColor = getResources().getColor(R.color.colorAccent);
                 break;
             case STATISTIC_CALORIES:
                 datasetLabel = "Daily Calories (kcal)";
-                chartColor = Color.RED; // Red for calories
+                chartColor = Color.RED;
                 break;
             case STATISTIC_STEPS:
             default:
                 datasetLabel = "Daily Steps";
-                chartColor = getResources().getColor(R.color.colorPrimary); // Default color for steps
+                chartColor = getResources().getColor(R.color.colorPrimary);
                 break;
         }
 

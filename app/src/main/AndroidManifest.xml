@@ -48,6 +48,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Design.NoActionBar" />
 
+
+        <activity
+            android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
         <activity
             android:name=".activity.StepGoalActivity"
             android:screenOrientation="portrait"

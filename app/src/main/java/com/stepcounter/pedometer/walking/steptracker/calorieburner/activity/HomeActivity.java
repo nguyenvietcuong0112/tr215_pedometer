@@ -15,7 +15,10 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,8 +31,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdView;
+import com.mallegan.ads.callback.NativeCallback;
+import com.mallegan.ads.util.Admob;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.R;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.model.DatabaseHelper;
+import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.CustomBottomSheetDialogExitFragment;
+import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.SharePreferenceUtils;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -68,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
     private  TextView stepsTextView,kcalTextView,kmTextView,hoursTextView;
 
     private TextView tvPlay;
+    private FrameLayout frAds;
     private ImageView icPlay;
 
     private float[] gravity = new float[3];
@@ -78,10 +88,16 @@ public class HomeActivity extends AppCompatActivity {
     private int valueIndex = 0;
     private int stepGoal;
 
+    private SharePreferenceUtils sharePreferenceUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+
+
+        sharePreferenceUtils = new SharePreferenceUtils(this);
+        sharePreferenceUtils.incrementCounter();
 
         initializeViews();
         setupSensor();
@@ -89,7 +105,9 @@ public class HomeActivity extends AppCompatActivity {
         loadTodayData();
         setupTimeUpdater();
         checkAndRequestPermissions();
+
     }
+
 
     private void initializeViews() {
         stepCountText = findViewById(R.id.stepCountText);
@@ -102,6 +120,8 @@ public class HomeActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         settingsButton = findViewById(R.id.settingsButton);
         settingDailyStep = findViewById(R.id.settingsDailyStep);
+
+        frAds = findViewById(R.id.frAds);
 
 
         mondayGoal = findViewById(R.id.dayMonday);
@@ -127,6 +147,48 @@ public class HomeActivity extends AppCompatActivity {
 
         updateDailyGoals();
         showMonthlyReport();
+        loadNative();
+        loadBanner();
+    }
+
+    private void loadBanner() {
+//        if (!SharePreferenceUtils.isOrganic(this)) {
+        Admob.getInstance().loadCollapsibleBanner(
+                this,
+                getString(R.string.banner_collap),
+                "top"
+        );
+//        } else {
+//            binding.llBanner.setVisibility(View.GONE);
+//        }
+    }
+
+    private void loadNative() {
+        if (!SharePreferenceUtils.isOrganic(HomeActivity.this)) {
+            loadAds();
+        } else {
+            frAds.setVisibility(View.GONE);
+        }
+    }
+
+    private void loadAds() {
+        Admob.getInstance().loadNativeAd(this, getString(R.string.native_home), new NativeCallback() {
+            @Override
+            public void onNativeAdLoaded(NativeAd nativeAd) {
+                super.onNativeAdLoaded(nativeAd);
+                NativeAdView adView = (NativeAdView) LayoutInflater.from(HomeActivity.this).inflate(R.layout.layout_native_introthree_non_organic, null);
+                frAds.setVisibility(View.VISIBLE);
+                frAds.removeAllViews();
+                frAds.addView(adView);
+                Admob.getInstance().pushAdsToViewCustom(nativeAd, adView);
+            }
+
+            @Override
+            public void onAdFailedToLoad() {
+                super.onAdFailedToLoad();
+                frAds.setVisibility(View.GONE);
+            }
+        });
     }
 
     private int getStepGoalForToday() {
@@ -236,7 +298,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         settingsButton.setOnClickListener(v -> {
-            // TODO: Implement settings
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
         });
 
         settingDailyStep.setOnClickListener(v -> {
@@ -438,6 +501,12 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             setupSensor();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        CustomBottomSheetDialogExitFragment dialog = CustomBottomSheetDialogExitFragment.newInstance();
+        dialog.show(getSupportFragmentManager(), "ExitDialog");
     }
 
     @Override

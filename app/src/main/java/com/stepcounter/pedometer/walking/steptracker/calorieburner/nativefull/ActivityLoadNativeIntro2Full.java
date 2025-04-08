@@ -29,30 +29,31 @@ public class ActivityLoadNativeIntro2Full extends BaseActivity {
     }
 
     private void loadNativeFull() {
-        Admob.getInstance().loadNativeAds(this, getString(R.string.native_tutorial2_full), 1, new NativeCallback() {
-            @Override
-            public void onAdFailedToLoad() {
-                super.onAdFailedToLoad();
-                binding.frAdsFull.setVisibility(View.GONE);
-                startActivity(new Intent(ActivityLoadNativeIntro2Full.this, Intro3Activity.class));
-                finish();
-
-            }
-
-            @Override
-            public void onNativeAdLoaded(NativeAd nativeAd) {
-                super.onNativeAdLoaded(nativeAd);
-                NativeAdView adView = (NativeAdView) LayoutInflater.from(ActivityLoadNativeIntro2Full.this)
-                        .inflate(R.layout.native_full_language, null);
-                ImageView closeButton = adView.findViewById(R.id.close);
-                closeButton.setOnClickListener(v -> {
-                    startActivity(new Intent(ActivityLoadNativeIntro2Full.this, Intro3Activity.class));
-                });
-                new Handler().postDelayed(() -> closeButton.setVisibility(View.VISIBLE), 2000);
-                binding.frAdsFull.removeAllViews();
-                binding.frAdsFull.addView(adView);
-                Admob.getInstance().pushAdsToViewCustom(nativeAd, adView);
-            }
-        });
+        binding.frAdsFull.setVisibility(View.GONE);
+        startActivity(new Intent(ActivityLoadNativeIntro2Full.this, Intro3Activity.class));
+        finish();
+//        Admob.getInstance().loadNativeAds(this, getString(R.string.native_tutorial2_full), 1, new NativeCallback() {
+//            @Override
+//            public void onAdFailedToLoad() {
+//                super.onAdFailedToLoad();
+//
+//
+//            }
+//
+//            @Override
+//            public void onNativeAdLoaded(NativeAd nativeAd) {
+//                super.onNativeAdLoaded(nativeAd);
+//                NativeAdView adView = (NativeAdView) LayoutInflater.from(ActivityLoadNativeIntro2Full.this)
+//                        .inflate(R.layout.native_full_language, null);
+//                ImageView closeButton = adView.findViewById(R.id.close);
+//                closeButton.setOnClickListener(v -> {
+//                    startActivity(new Intent(ActivityLoadNativeIntro2Full.this, Intro3Activity.class));
+//                });
+//                new Handler().postDelayed(() -> closeButton.setVisibility(View.VISIBLE), 2000);
+//                binding.frAdsFull.removeAllViews();
+//                binding.frAdsFull.addView(adView);
+//                Admob.getInstance().pushAdsToViewCustom(nativeAd, adView);
+//            }
+//        });
     }
 }

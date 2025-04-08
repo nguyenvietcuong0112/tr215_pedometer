@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pedometer</string>
+    <string name="app_name">Track Daily Steps &amp; Walk</string>
     <string name="steps">Steps</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>

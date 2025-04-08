@@ -88,8 +88,8 @@ public class  LanguageActivity extends BaseActivity implements UILanguageCustom.
         }
 
         if (fromSettings) {
-//            binding.ivBack.setVisibility(View.VISIBLE);
-            binding.frAds.setVisibility(View.GONE);
+            binding.ivBack.setVisibility(View.VISIBLE);
+//            binding.frAds.setVisibility(View.GONE);
 
         }
         binding.ivBack.setOnClickListener(v -> {

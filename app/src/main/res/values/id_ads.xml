@@ -5,40 +5,30 @@
     //dev
     <string name="app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
-    <string name="inter_splash" translatable="false"></string>
-    <string name="inter_intro" translatable="false"></string>
-    <string name="inter_home" translatable="false"></string>
-    <string name="inter_save_transaction" translatable="false"></string>
+    <string name="inter_splash" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="inter_intro" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 
-    <string name="native_onboarding1" translatable="false"></string>
-    <string name="native_onboarding2" translatable="false"></string>
-    <string name="native_onboarding3" translatable="false"></string>
-    <string name="native_onboarding4" translatable="false"></string>
+    <string name="native_onboarding1" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_onboarding2" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_onboarding3" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_onboarding4" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
 
-    <string name="native_language" translatable="false"></string>
-    <string name="native_language_select" translatable="false"></string>
+    <string name="native_language" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_language_select" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
 
-    <string name="native_home" translatable="false"></string>
-    <string name="native_overview" translatable="false"></string>
-    <string name="native_report" translatable="false"></string>
-    <string name="native_currency" translatable="false"></string>
-    <string name="native_popup" translatable="false"></string>
+    <string name="native_home" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_report" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_step_goal" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_popup_exit" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_setting" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
 
+    <string name="banner_collap" translatable="false">ca-app-pub-3940256099942544/2014213617</string>
+    <string name="banner_collapse_intro" translatable="false">ca-app-pub-3940256099942544/2014213617</string>
 
-    <string name="native_edit_transaction" translatable="false"></string>
+    <string name="native_full_intro" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_full_language" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
 
-    <string name="banner_collap" translatable="false"></string>
-    <string name="banner_collapse_intro" translatable="false"></string>
-
-    <string name="native_full_intro" translatable="false"></string>
-    <string name="native_full_inter_home" translatable="false"></string>
-    <string name="native_full_language" translatable="false"></string>
-    <string name="native_full_save_transaction" translatable="false"></string>
-    <string name="native_tutorial_full" translatable="false"></string>
-    <string name="native_tutorial2_full" translatable="false"></string>
-    <string name="native_tutorial3_full" translatable="false"></string>
-
-    <string name="open_resume" translatable="false"></string>
+    <string name="open_resume" translatable="false">ca-app-pub-3940256099942544/9257395921</string>
 
 
     <string name="AF_DEV_KEY" translatable="false">LikYKU2zUYTct7BoQ7MuJY</string>
@@ -46,46 +36,4 @@
     <string name="facebook_client_token" translatable="false">56789</string>
 
     //prod
-<!--    <string name="app_id" translatable="false">ca-app-pub-5839511744003864~4238729532</string>-->
-
-<!--    <string name="inter_splash" translatable="false">ca-app-pub-5839511744003864/8470754059</string>-->
-<!--    <string name="inter_intro" translatable="false">ca-app-pub-5839511744003864/5844590719</string>-->
-<!--    <string name="inter_home" translatable="false">ca-app-pub-5839511744003864/3639399084</string>-->
-<!--    <string name="inter_save_transaction" translatable="false">ca-app-pub-5839511744003864/4531509040</string>-->
-
-<!--    <string name="native_onboarding1" translatable="false">ca-app-pub-5839511744003864/2326317415</string>-->
-<!--    <string name="native_onboarding2" translatable="false">ca-app-pub-5839511744003864/4976531486</string>-->
-<!--    <string name="native_onboarding3" translatable="false">ca-app-pub-5839511744003864/1013235748</string>-->
-<!--    <string name="native_onboarding4" translatable="false">ca-app-pub-5839511744003864/3342550458</string>-->
-
-<!--    <string name="native_language" translatable="false">ca-app-pub-5839511744003864/8724204807</string>-->
-<!--    <string name="native_language_select" translatable="false">ca-app-pub-5839511744003864/9716387119</string>-->
-
-<!--    <string name="native_home" translatable="false">ca-app-pub-5839511744003864/3102877306</string>-->
-<!--    <string name="native_overview" translatable="false">ca-app-pub-5839511744003864/6369504201</string>-->
-<!--    <string name="native_report" translatable="false">ca-app-pub-5839511744003864/1789795634</string>-->
-<!--    <string name="native_currency" translatable="false">ca-app-pub-5839511744003864/9472844532</string>-->
-<!--    <string name="native_popup" translatable="false">ca-app-pub-5839511744003864/5653019021</string>-->
-
-
-<!--    <string name="native_edit_transaction" translatable="false">ca-app-pub-5839511744003864/2430259199</string>-->
-
-<!--    <string name="banner_collap" translatable="false">ca-app-pub-5839511744003864/8403305440</string>-->
-<!--    <string name="banner_collapse_intro" translatable="false">ca-app-pub-5839511744003864/8564422707</string>-->
-
-<!--    <string name="native_full_intro" translatable="false">ca-app-pub-5839511744003864/7251341035</string>-->
-<!--    <string name="native_full_inter_home" translatable="false">ca-app-pub-5839511744003864/3447827394</string>-->
-<!--    <string name="native_full_language" translatable="false">ca-app-pub-5839511744003864/5938259363</string>-->
-<!--    <string name="native_full_save_transaction" translatable="false">ca-app-pub-5839511744003864/1117177520</string>-->
-
-<!--    <string name="native_tutorial_full" translatable="false"></string>-->
-<!--    <string name="native_tutorial2_full" translatable="false"></string>-->
-<!--    <string name="native_tutorial3_full" translatable="false"></string>-->
-
-<!--    <string name="open_resume" translatable="false"></string>-->
-
-
-<!--    <string name="AF_DEV_KEY" translatable="false">LikYKU2zUYTct7BoQ7MuJY</string>-->
-<!--    <string name="facebook_app_id" translatable="false">2051372818701866</string>-->
-<!--    <string name="facebook_client_token" translatable="false">5e7b61d5087d32726354c76532ce0bff</string>-->
 </resources>

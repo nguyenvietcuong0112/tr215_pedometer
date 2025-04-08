@@ -13,7 +13,7 @@ import com.stepcounter.pedometer.walking.steptracker.calorieburner.activity.Lang
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.activity.SplashActivity;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.AppActivityTracker;
 import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.SharePreferenceUtils;
-import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.TimerManager;
+//import com.stepcounter.pedometer.walking.steptracker.calorieburner.utils.TimerManager;
 
 
 import java.util.List;
@@ -88,7 +88,7 @@ public class MyApplication extends AdsApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        TimerManager.getInstance().stopTimer();
+//        TimerManager.getInstance().stopTimer();
     }
 
 

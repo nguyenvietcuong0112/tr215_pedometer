@@ -64,12 +64,14 @@ public class SplashActivity extends BaseActivity {
 //                if (SharePreferenceUtils.getInstance(SplashActivity.this).isLanguageSetting()) {
 //                    startActivity(new Intent(SplashActivity.this, IntroActivity.class));
 //                } else {
-//                if (counterValue == 1) {
+                if (counterValue == 1) {
                     startActivity(new Intent(SplashActivity.this, InterestActivity.class));
-//                } else {
-//                    startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
-//                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-//                }
+                } else if (counterValue == 0){
+                    startActivity(new Intent(SplashActivity.this, LanguageActivity.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+
+                }
 //
                 finish();
             }
